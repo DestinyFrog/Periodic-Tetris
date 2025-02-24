@@ -1,5 +1,5 @@
 (async () => {
-    const resp = await fetch("/atoms.json");
+    const resp = await fetch("./atoms.json");
     const elements = (await resp.json()).map((element) => {
         return {
             ...element,
