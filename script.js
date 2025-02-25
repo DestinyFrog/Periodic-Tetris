@@ -22,7 +22,11 @@
                     case "metaloide":
                         return "#ff22ee";
                     case "halogênio":
-                        return "#00aaee";
+                        return "#226622";
+                    case "lantanídeo":
+                        return "#0066dd";
+                    case "actinídeo":
+                        return "#00dd66";
                     case "desconhecido":
                     default:
                         return "#444444";
@@ -41,11 +45,11 @@
     main.appendChild(elementLog);
 
     const pointLog = document.createElement("p");
-	pointLog.id = "element-point";
+    pointLog.id = "element-point";
     elementLog.appendChild(pointLog);
 
     const symbolLog = document.createElement("h1");
-	symbolLog.id = "element-symbol"
+    symbolLog.id = "element-symbol"
     elementLog.appendChild(symbolLog);
 
     const ctx = canvas.getContext("2d");
@@ -54,22 +58,6 @@
     const COLS = 9;
     const ROWS = 20;
     const DELAY = 150;
-
-    let points = {
-        _value: 0,
-
-        set value(v) {
-            this._value = v;
-            if (this._value != 0 || this._value >= elements.length) {
-                pointLog.textContent = this._value;
-                symbolLog.textContent = elements[this._value-1].simbolo;
-                elementLog.style.backgroundColor = elements[this._value-1].cor;
-            } else {
-				pointLog.textContent = '';
-                symbolLog.textContent = this._value;
-            }
-        },
-    };
 
     const WIDTH = COLS * UNIT;
     const HEIGHT = ROWS * UNIT;
@@ -88,7 +76,7 @@
                 blocks[i].push(null);
             }
         }
-        points.value = 0;
+        player.value = 0;
     }
 
     let forms = [
@@ -128,6 +116,21 @@
         x: Math.floor(COLS / 2),
         y: 0,
         blocks: [],
+
+        _value: 0,
+
+        set value(v) {
+            this._value = v;
+            if (this._value != 0 || this._value >= elements.length) {
+                pointLog.textContent = this._value;
+                symbolLog.textContent = elements[this._value - 1].simbolo;
+                elementLog.style.backgroundColor = elements[this._value - 1].cor;
+            } else {
+                pointLog.textContent = '';
+                symbolLog.textContent = this._value;
+                elementLog.style.backgroundColor = 'black';
+            }
+        },
     };
 
     document.body.addEventListener("keydown", (ev) => {
@@ -157,7 +160,7 @@
         ctx.textBaseline = "middle";
         ctx.font = "15px Arial";
 
-        points.value = 0;
+        player.value = 0;
 
         playerReset();
         resetBlocks();
@@ -242,7 +245,7 @@
             if (
                 player.y + player.blocks[i].y + 1 == ROWS ||
                 blocks[player.y + player.blocks[i].y + 1][
-                    player.x + player.blocks[i].x
+                player.x + player.blocks[i].x
                 ]
             )
                 return true;
@@ -276,7 +279,7 @@
                     0
                 ) >= COLS
             ) {
-                points.value = points._value + 1;
+                player.value = player._value + 1;
                 for (let j = i; j >= 1; j--) {
                     blocks[j] = [...blocks[j - 1]];
                 }
