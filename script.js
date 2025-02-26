@@ -136,11 +136,13 @@
     document.body.addEventListener("keydown", (ev) => {
         switch (ev.keyCode) {
             case 37: // Left
-                player.x--;
+                let hitBorderLeft = player.blocks.reduce((hitBorder, block) => (hitBorder || player.x + block.x <= 0), false )
+                if (!hitBorderLeft) player.x--;
                 break;
 
             case 39: // Right
-                player.x++;
+                let hitBorderRight = player.blocks.reduce((hitBorder, block) => (hitBorder || player.x + block.x >= COLS-1), false )
+                if (!hitBorderRight) player.x++;
                 break;
 
             case 38: // Up
