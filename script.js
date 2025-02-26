@@ -35,7 +35,11 @@
         };
     });
 
-    const main = document.getElementById("main");
+    const menuButtonLeft = document.getElementById("menu-button-left");
+    const menuButtonSpin = document.getElementById("menu-button-spin");
+    const menuButtonRight = document.getElementById("menu-button-right");
+
+    const main = document.getElementById("game-container");
     const canvas = document.createElement("canvas");
     canvas.id = "canvas";
     main.appendChild(canvas);
@@ -131,28 +135,44 @@
                 elementLog.style.backgroundColor = 'black';
             }
         },
+
+        goLeft() {
+            let hitBorderLeft = this.blocks.reduce((hitBorder, block) => (hitBorder || this.x + block.x <= 0), false )
+            if (!hitBorderLeft) this.x--;
+        },
+
+        goRight() {
+            let hitBorderRight = this.blocks.reduce((hitBorder, block) => (hitBorder || this.x + block.x >= COLS-1), false )
+            if (!hitBorderRight) this.x++;
+        },
+
+        spin() {
+            this.blocks = this.blocks.map((block) => {
+                return {
+                    ...block,
+                    x: block.y * -1,
+                    y: block.x * (block.x == 0 ? -1 : 1),
+                };
+            });
+        }
     };
+
+    menuButtonLeft.addEventListener('click', () => player.goLeft())
+    menuButtonSpin.addEventListener('click', () => player.spin())
+    menuButtonRight.addEventListener('click', () => player.goRight())
 
     document.body.addEventListener("keydown", (ev) => {
         switch (ev.keyCode) {
             case 37: // Left
-                let hitBorderLeft = player.blocks.reduce((hitBorder, block) => (hitBorder || player.x + block.x <= 0), false )
-                if (!hitBorderLeft) player.x--;
+                player.goLeft();
                 break;
 
             case 39: // Right
-                let hitBorderRight = player.blocks.reduce((hitBorder, block) => (hitBorder || player.x + block.x >= COLS-1), false )
-                if (!hitBorderRight) player.x++;
+                player.goRight();
                 break;
 
             case 38: // Up
-                player.blocks = player.blocks.map((block) => {
-                    return {
-                        ...block,
-                        x: block.y * -1,
-                        y: block.x * (block.x == 0 ? -1 : 1),
-                    };
-                });
+                player.spin();
                 break;
         }
     });
